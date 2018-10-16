@@ -41,3 +41,15 @@ def get_all_sg(region=None):
         groups.extend(data["SecurityGroups"])
 
     return groups
+
+def get_all_volumes(region=None):
+    if not region:
+        region = config.REGIONS
+
+    volumes = []
+    for region in config.REGIONS:
+        client = boto3.client('ec2', region_name=region)
+        data = client.describe_volumes()
+        volumes.extend(data["Volumes"])
+
+    return volumes
