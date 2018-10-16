@@ -3,12 +3,12 @@ import boto3
 import config
 
 
-def get_all_instances(region=None):
-    if not region:
-        region = config.REGIONS
-
+def get_all_instances(region_list=None):
+    if not region_list:
+        region_list = config.REGIONS
+    
     instances = []
-    for region in config.REGIONS:
+    for region in region_list:
         client = boto3.client('ec2', region_name=region)
         data = client.describe_instances()
         for res in data["Reservations"]:

@@ -10,7 +10,7 @@ def clean_ec2():
     limit = timedelta(days=EC2_OLD_DAYS)
 
     for region in REGIONS:
-        instances = get_all_instances(region)
+        instances = get_all_instances([region])
 
         if instances:
             print("> Found {} instances in {}".format(len(instances), region))
