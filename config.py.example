@@ -1,0 +1,7 @@
+#! /usr/bin/env python3
+
+# Regions to crawl for resources
+REGIONS = ["eu-central-1", "eu-west-1"]
+
+# Alert when EC2 instances run for this amount of days
+EC2_OLD_DAYS = 100
