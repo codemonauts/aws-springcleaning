@@ -17,14 +17,20 @@ that are not used by anything else and gives you a list. Later versions will
 maybe clean them up for you.
 
 ## Requirements
-  * Python3 with boto3 library
+  * Python3
+  * Python3 librarys
+    * boto3
+    * crayons
   * IAM user which can use `Describe`
+
+## Usage
+  1. Configure your AWS credentials with `awscli`
+  2. Install the Python requirements with `pip3 install --user -r requirements.txt`
+  3. Run `./full_scan.py``
+  4. Clean up your account ;)
+
 
 ## ToDo
   * Properly define needed IAM rights to run these scripts
   * Find empty S3 buckets
-  * Find unused AMIs
-  * Find old EC2 Snapshots
-  * Find old RDS Snapshots
-  * Find unattached Volumes
   * Find unused IAM Users/Policys/Roles
