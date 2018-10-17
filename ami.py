@@ -1,10 +1,12 @@
 #! /usr/bin/env python3
 import boto3
+import crayons
 from config import REGIONS
-from helper import get_all_instances
+from helper import get_all_instances, get_account_id
 
-def clean_ami():
-    account_id = boto3.client('sts').get_caller_identity().get('Account')
+
+def scan():
+    account_id = get_account_id()
 
     for region in REGIONS:
         # Filter only for our own images
@@ -22,10 +24,10 @@ def clean_ami():
             if ami["ImageId"] not in used_images:
                 unused_images.append(ami)
         if len(unused_images):
-            print("{} of them are not in use:".format(len(unused_images)))
+            print("{} of them are not in use:".format(crayons.red(len(unused_images))))
             for ami in unused_images:
-                print("  - {} ({})".format(ami["ImageId"], ami["Name"]))
+                print("  - {:<22} ({})".format(ami["ImageId"], ami["Name"]))
 
 
 if __name__ == "__main__":
-    clean_ami()
+    scan()

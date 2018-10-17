@@ -1,8 +1,9 @@
 #! /usr/bin/env python3
 from helper import get_all_instances, get_all_rds, get_all_sg
+import crayons
 
 
-def clean_securitygroups():
+def scan():
     used_groups = []
 
     for instance in get_all_instances():
@@ -24,12 +25,12 @@ def clean_securitygroups():
             not_used.append(group)
 
     if len(not_used):
-        print("{} of them seem to be not in use".format(len(not_used)))
+        print("{} of them seem to be not in use".format(crayons.red(len(not_used))))
         for sg in not_used:
-            print("    - {} ({})".format(sg["GroupId"], sg["GroupName"]))
+            print("  - {} ({})".format(sg["GroupId"], sg["GroupName"]))
     else:
         print("All of them appear to be in use")
 
 
 if __name__ == "__main__":
-    clean_securitygroups()
+    scan()

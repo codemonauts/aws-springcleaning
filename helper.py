@@ -6,7 +6,7 @@ import config
 def get_all_instances(region_list=None):
     if not region_list:
         region_list = config.REGIONS
-    
+
     instances = []
     for region in region_list:
         client = boto3.client('ec2', region_name=region)
@@ -42,6 +42,7 @@ def get_all_sg(region=None):
 
     return groups
 
+
 def get_all_volumes(region=None):
     if not region:
         region = config.REGIONS
@@ -53,3 +54,7 @@ def get_all_volumes(region=None):
         volumes.extend(data["Volumes"])
 
     return volumes
+
+
+def get_account_id():
+    return boto3.client('sts').get_caller_identity().get('Account')
