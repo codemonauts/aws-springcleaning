@@ -6,7 +6,7 @@ from datetime import timedelta
 from helper import get_all_instances
 
 
-def scan():
+def scan(showEverything=False):
     now = arrow.utcnow()
     limit = timedelta(days=EC2_OLD_DAYS)
 
@@ -18,30 +18,38 @@ def scan():
         else:
             continue  # to next region
 
-        stopped = []
-        old = []
-        for i in instances:
-            if i["State"]["Name"] == "stopped":
-                stopped.append(i)
-                continue
-
-            age = now - i["LaunchTime"]
-            if age > limit:
-                old.append(i)
-
-        if len(stopped):
-            print("{} instances are stopped:".format(crayons.red(len(stopped))))
-            for i in stopped:
+        if showEverything:
+            for i in instances:
                 name = [t["Value"] for t in i["Tags"] if t["Key"] == "Name"][0]
-                launch_time = arrow.get(i["LaunchTime"]).humanize()
-                print("  - {:>30}".format(name))
+                if i["State"]["Name"] == "stopped":
+                    print("  - {:>30} (Stopped)".format(name))
+                else:
+                    launch_time = arrow.get(i["LaunchTime"]).humanize()
+                    print("  - {:>30} (Started {})".format(name, launch_time))
+        else:
+            stopped = []
+            old = []
+            for i in instances:
+                if i["State"]["Name"] == "stopped":
+                    stopped.append(i)
+                    continue
 
-        if len(old):
-            print("{} old instances are still running:".format(crayons.red(len(old))))
-            for i in old:
-                name = [t["Value"] for t in i["Tags"] if t["Key"] == "Name"][0]
-                launch_time = arrow.get(i["LaunchTime"]).humanize()
-                print("  - {:>30} (Started {})".format(name, launch_time))
+                age = now - i["LaunchTime"]
+                if age > limit:
+                    old.append(i)
+
+            if len(stopped):
+                print("{} instances are stopped:".format(crayons.red(len(stopped))))
+                for i in stopped:
+                    name = [t["Value"] for t in i["Tags"] if t["Key"] == "Name"][0]
+                    print("  - {:>30}".format(name))
+
+            if len(old):
+                print("{} old instances are still running:".format(crayons.red(len(old))))
+                for i in old:
+                    name = [t["Value"] for t in i["Tags"] if t["Key"] == "Name"][0]
+                    launch_time = arrow.get(i["LaunchTime"]).humanize()
+                    print("  - {:>30} (Started {})".format(name, launch_time))
 
 
 if __name__ == "__main__":

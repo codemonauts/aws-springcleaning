@@ -20,7 +20,6 @@ start = timeit.default_timer()
 print(crayons.yellow('Scanning AMIs'))
 ami.scan()
 
-
 print(crayons.yellow('Scanning EC2 instances'))
 ec2.scan()
 
