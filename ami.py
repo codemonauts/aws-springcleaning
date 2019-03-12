@@ -15,7 +15,7 @@ def scan(showEverything=False):
 
         if showEverything:
             for ami in ami_list:
-                print("  - {:<22} ({})".format(ami["ImageId"], ami["Name"]))
+                print("  - {:<30} ({})".format(ami["ImageId"], ami["Name"]))
         else:
             used_images = []
             if len(ami_list):
@@ -30,7 +30,7 @@ def scan(showEverything=False):
             if len(unused_images):
                 print("{} of them are not in use:".format(crayons.red(len(unused_images))))
                 for ami in unused_images:
-                    print("  - {:<22} ({})".format(ami["ImageId"], ami["Name"]))
+                    print("  - {:<30} ({})".format(ami["ImageId"], ami["Name"]))
 
 
 if __name__ == "__main__":

@@ -14,18 +14,19 @@ def scan(showEverything=False):
         instances = get_all_instances([region])
 
         if instances:
-            print("Found {} instances in {}".format(len(instances), region))
+            print("Found {} EC2 instances in {}".format(len(instances), region))
         else:
+            print("Found no EC2 instances in {}".format(len(instances), region))
             continue  # to next region
 
         if showEverything:
             for i in instances:
                 name = [t["Value"] for t in i["Tags"] if t["Key"] == "Name"][0]
                 if i["State"]["Name"] == "stopped":
-                    print("  - {:>30} (Stopped)".format(name))
+                    print("  - {:<50} (Stopped)".format(name))
                 else:
                     launch_time = arrow.get(i["LaunchTime"]).humanize()
-                    print("  - {:>30} (Started {})".format(name, launch_time))
+                    print("  - {:<50} (Started {})".format(name, launch_time))
         else:
             stopped = []
             old = []
@@ -42,14 +43,14 @@ def scan(showEverything=False):
                 print("{} instances are stopped:".format(crayons.red(len(stopped))))
                 for i in stopped:
                     name = [t["Value"] for t in i["Tags"] if t["Key"] == "Name"][0]
-                    print("  - {:>30}".format(name))
+                    print("  - {:<50}".format(name))
 
             if len(old):
                 print("{} old instances are still running:".format(crayons.red(len(old))))
                 for i in old:
                     name = [t["Value"] for t in i["Tags"] if t["Key"] == "Name"][0]
                     launch_time = arrow.get(i["LaunchTime"]).humanize()
-                    print("  - {:>30} (Started {})".format(name, launch_time))
+                    print("  - {:<50} (Started {})".format(name, launch_time))
 
 
 if __name__ == "__main__":
