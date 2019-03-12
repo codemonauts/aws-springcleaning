@@ -17,7 +17,7 @@ def scan(showEverything=False):
         volumes = get_all_volumes([region])
         available_volume_ids = [v["VolumeId"] for v in volumes]
 
-        snapshot_list = boto3.client("ec2").describe_snapshots(OwnerIds=[account_id])["Snapshots"]
+        snapshot_list = boto3.client("ec2", region_name=region).describe_snapshots(OwnerIds=[account_id])["Snapshots"]
         print("Found {} snapshots in {}".format(len(snapshot_list), region))
         if showEverything:
             for i in snapshot_list:
