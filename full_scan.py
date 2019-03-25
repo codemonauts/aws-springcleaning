@@ -14,11 +14,14 @@ import volumes
 import lambdafunctions
 import cloudwatch
 import cloudformation
+import s3
 
 SHOW_EVERYTHING=True
 
 print("Starting full account scan for these Regions: {}".format(",".join(config.REGIONS)))
-print("Account: {}".format(helper.get_account_id()))
+account_id = helper.get_account_id()
+print("Account: {}".format(account_id))
+start_date = datetime.now().strftime("%Y-%m-%d_%H:%M")
 print("Start date: {}".format(datetime.now()))
 
 start = timeit.default_timer()
@@ -50,6 +53,8 @@ lambdafunctions.scan(SHOW_EVERYTHING)
 print(crayons.yellow('Scanning CloudFormation'))
 cloudformation.scan(SHOW_EVERYTHING)
 
+print(crayons.yellow('Scanning S3'))
+s3.scan(SHOW_EVERYTHING)
 
 stop = timeit.default_timer()
 runtime = int(stop-start)
