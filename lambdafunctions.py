@@ -1,7 +1,10 @@
 #! /usr/bin/env python3
 import boto3
 import arrow
+import crayons
 from config import REGIONS
+
+OUTDATED = ["nodejs8.10", "python2.7", "python3.6"]
 
 
 def scan(showEverything=False):
@@ -18,8 +21,12 @@ def scan(showEverything=False):
         print("Found {} lambda functions in {}".format(len(functions), region))
         for f in functions:
             last_modified = arrow.get(f["LastModified"]).humanize()
+            if f["Runtime"] in OUTDATED:
+                runtime = crayons.red(f["Runtime"])
+            else:
+                runtime = f["Runtime"]
             print(
-                "  - {:<50} (Last modified: {})".format(f["FunctionName"], last_modified))
+                "  - {:<50} (Last modified: {}, {})".format(f["FunctionName"], last_modified, runtime))
 
 
 if __name__ == "__main__":
