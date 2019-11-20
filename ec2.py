@@ -16,7 +16,7 @@ def scan(showEverything=False):
         if instances:
             print("Found {} EC2 instances in {}".format(len(instances), region))
         else:
-            print("Found no EC2 instances in {}".format(len(instances), region))
+            print("Found no EC2 instances in {}".format(region))
             continue  # to next region
 
         if showEverything:
