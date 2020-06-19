@@ -1,5 +1,6 @@
 #! /usr/bin/env python3
 import boto3
+import crayons
 from config import REGIONS
 
 
@@ -18,11 +19,21 @@ def scan():
             print("Found {} log groups in {}".format(len(log_groups), region))
 
         for group in log_groups:
+            show = False
             if group.get("retentionInDays"):
                 retention = "{}d".format(group["retentionInDays"])
             else:
-                retention = "Never"
-            print("  - {:<50} (Expire: {})".format(group["logGroupName"], retention))
+                show = True
+                retention = crayons.red("Never")
+
+            if group.get("storedBytes"):
+                size = "{} bytes".format(group["storedBytes"])
+            else:
+                show = True
+                size = crayons.yellow("Empty")
+
+            if show:
+                print("  - {:<50} (Expire: {}, Size: {})".format(group["logGroupName"], retention, size))
 
 
 if __name__ == "__main__":
