@@ -3,7 +3,7 @@ from helper import get_all_instances, get_all_rds, get_all_sg
 import crayons
 
 
-def scan(showEverything=False):
+def scan():
     used_groups = []
 
     for instance in get_all_instances():
@@ -18,22 +18,18 @@ def scan(showEverything=False):
 
     print("Found {} security groups".format(len(all_sg)))
 
-    if showEverything:
-        for sg in all_sg:
+    not_used = []
+    for group in all_sg:
+        id = group["GroupId"]
+        if id not in used_groups:
+            not_used.append(group)
+
+    if len(not_used):
+        print("{} of them seem to be not in use".format(crayons.red(len(not_used))))
+        for sg in not_used:
             print("  - {} ({})".format(sg["GroupId"], sg["GroupName"]))
     else:
-        not_used = []
-        for group in all_sg:
-            id = group["GroupId"]
-            if id not in used_groups:
-                not_used.append(group)
-
-        if len(not_used):
-            print("{} of them seem to be not in use".format(crayons.red(len(not_used))))
-            for sg in not_used:
-                print("  - {} ({})".format(sg["GroupId"], sg["GroupName"]))
-        else:
-            print("All of them appear to be in use")
+        print("All of them appear to be in use")
 
 
 if __name__ == "__main__":

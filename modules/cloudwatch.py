@@ -3,7 +3,7 @@ import boto3
 from config import REGIONS
 
 
-def scan(showEverything=False):
+def scan():
 
     for region in REGIONS:
         client = boto3.client("logs", region_name=region)
@@ -17,14 +17,12 @@ def scan(showEverything=False):
         else:
             print("Found {} log groups in {}".format(len(log_groups), region))
 
-        if showEverything:
-            for group in log_groups:
-                if group.get("retentionInDays"):
-                    retention = "{}d".format(group["retentionInDays"])
-                else:
-                    retention = "Never"
-                print(
-                    "  - {:<50} (Expire: {})".format(group["logGroupName"], retention))
+        for group in log_groups:
+            if group.get("retentionInDays"):
+                retention = "{}d".format(group["retentionInDays"])
+            else:
+                retention = "Never"
+            print("  - {:<50} (Expire: {})".format(group["logGroupName"], retention))
 
 
 if __name__ == "__main__":

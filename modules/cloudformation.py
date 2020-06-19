@@ -5,7 +5,7 @@ from config import REGIONS
 from pprint import pprint
 
 
-def scan(showEverything=False):
+def scan():
     for region in REGIONS:
         client = boto3.client("cloudformation", region_name=region)
 

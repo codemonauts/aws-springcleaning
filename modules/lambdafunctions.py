@@ -7,7 +7,7 @@ from config import REGIONS
 OUTDATED = ["nodejs8.10", "python2.7", "python3.6"]
 
 
-def scan(showEverything=False):
+def scan():
     for region in REGIONS:
         client = boto3.client("lambda", region_name=region)
 
@@ -25,8 +25,7 @@ def scan(showEverything=False):
                 runtime = crayons.red(f["Runtime"])
             else:
                 runtime = f["Runtime"]
-            print(
-                "  - {:<50} (Last modified: {}, {})".format(f["FunctionName"], last_modified, runtime))
+            print("  - {:<50} (Last modified: {}, {})".format(f["FunctionName"], last_modified, runtime))
 
 
 if __name__ == "__main__":
