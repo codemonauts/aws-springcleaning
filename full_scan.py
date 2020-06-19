@@ -1,7 +1,14 @@
 #! /usr/bin/env python3
+from sys import exit
+
+try:
+    import config
+except ModuleNotFoundError:
+    print("Please create a 'config.py' before running this tool")
+    exit(1)
+
 import crayons
 import helper
-import config
 import timeit
 from datetime import datetime
 
