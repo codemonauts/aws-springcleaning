@@ -1,11 +1,15 @@
 #! /usr/bin/env python3
 import boto3
 import arrow
-from config import REGIONS
+from config import REGIONS, CF_STACK_OLD_DAYS
 from pprint import pprint
+from datetime import timedelta
 
 
 def scan():
+    limit = timedelta(days=CF_STACK_OLD_DAYS)
+    now = arrow.utcnow()
+
     for region in REGIONS:
         client = boto3.client("cloudformation", region_name=region)
 
@@ -17,9 +21,12 @@ def scan():
             continue
 
         print("Found {} CF stacks in {}".format(len(stacks), region))
+        old = []
         for s in stacks:
-            last_updated = arrow.get(s["LastUpdatedTime"]).humanize()
-            print("  - {:<50} (Last updated: {}, State: {})".format(s["StackName"], last_updated, s["StackStatus"]))
+            age = now - s["LastUpdatedTime"]
+            if age > limit:
+                last_updated = arrow.get(s["LastUpdatedTime"]).humanize()
+                print("  - {:<50} (Last updated: {}, State: {})".format(s["StackName"], last_updated, s["StackStatus"]))
 
 
 if __name__ == "__main__":

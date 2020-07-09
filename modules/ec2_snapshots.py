@@ -37,7 +37,7 @@ def scan():
                 print("    - {}".format(i["SnapshotId"]))
 
         if len(old):
-            print("{} are old".format(crayons.red(len(old))))
+            print("{} are older than {} days".format(crayons.red(len(old)), EC2_SNAPSHOT_OLD_DAYS))
             for i in old:
                 create_time = arrow.get(i["StartTime"]).humanize()
                 print("  - {:<22} (Created {})".format(i["SnapshotId"], create_time))

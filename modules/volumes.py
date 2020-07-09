@@ -10,9 +10,9 @@ def scan():
         client = boto3.client("ec2", region_name=region)
         response = client.describe_volumes()
         if "Volumes" in response and len(response["Volumes"]) > 0:
-            print("Found {} volumes accross all regions".format(len(response["Volumes"])))
+            print("Found {} volumes in {}".format(len(response["Volumes"]), region))
         else:
-            print("Found no volumes in {}".format(REGION))
+            print("Found no volumes in {}".format(region))
 
         available = [v for v in response["Volumes"] if v["State"] == "available"]
         if len(available):
