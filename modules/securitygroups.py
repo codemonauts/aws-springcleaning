@@ -24,12 +24,28 @@ def scan():
         if id not in used_groups:
             not_used.append(group)
 
-    if len(not_used):
-        print("{} of them seem to be not in use".format(crayons.red(len(not_used))))
-        for sg in not_used:
-            print("  - {} ({})".format(sg["GroupId"], sg["GroupName"]))
-    else:
-        print("All of them appear to be in use")
+    for sg in all_sg:
+        flags = []
+        if sg in not_used:
+            flags.append(crayons.yellow(" Not used"))
+        if world_open(group):
+            flags.append(crayons.red(" World Open"))
+        if sg["GroupName"].find("launch-wizard") != -1:
+            flags.append(crayons.red(" DefaultName"))
+        if len(flags) > 0:
+            suffix = ",".join([str(f) for f in flags])
+            print("  - {} ({}) {}".format(sg["GroupId"], sg["GroupName"], suffix))
+
+
+def world_open(group):
+    rules = group["IpPermissions"]
+    for r in rules:
+        cidr = [x["CidrIp"] for x in r["IpRanges"]]
+        cidr6 = [x["CidrIp"] for x in r["Ipv6Ranges"]]
+        if "0.0.0.0/0" in cidr or "::/0" in cidr6:
+            return True
+
+    return False
 
 
 if __name__ == "__main__":
