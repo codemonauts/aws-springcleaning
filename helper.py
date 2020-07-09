@@ -9,7 +9,7 @@ def get_all_instances(region_list=None):
 
     instances = []
     for region in region_list:
-        client = boto3.client('ec2', region_name=region)
+        client = boto3.client("ec2", region_name=region)
         data = client.describe_instances()
         for res in data["Reservations"]:
             instances.extend(res["Instances"])
@@ -23,7 +23,7 @@ def get_all_rds(region=None):
 
     databases = []
     for region in config.REGIONS:
-        client = boto3.client('rds', region_name=region)
+        client = boto3.client("rds", region_name=region)
         data = client.describe_db_instances()
         databases.extend(data["DBInstances"])
 
@@ -36,7 +36,7 @@ def get_all_sg(region=None):
 
     groups = []
     for region in config.REGIONS:
-        client = boto3.client('ec2', region_name=region)
+        client = boto3.client("ec2", region_name=region)
         data = client.describe_security_groups()
         groups.extend(data["SecurityGroups"])
 
@@ -49,7 +49,7 @@ def get_all_volumes(region=None):
 
     volumes = []
     for region in config.REGIONS:
-        client = boto3.client('ec2', region_name=region)
+        client = boto3.client("ec2", region_name=region)
         data = client.describe_volumes()
         volumes.extend(data["Volumes"])
 
@@ -57,4 +57,11 @@ def get_all_volumes(region=None):
 
 
 def get_account_id():
-    return boto3.client('sts').get_caller_identity().get('Account')
+    return boto3.client("sts").get_caller_identity().get("Account")
+
+
+def get_all_regions():
+    ec2 = boto3.client("ec2")
+    response = ec2.describe_regions()
+    regions = response["Regions"]
+    return [r["RegionName"] for r in regions]

@@ -26,11 +26,23 @@ from modules import (
     s3,
 )
 
+all_regions = helper.get_all_regions()
+
+if len(config.REGIONS) == 0:
+    print(crayons.red("REGIONS must contain at least one region".format(r)))
+    exit(1)
+
+for r in config.REGIONS:
+    if r not in all_regions:
+        print(crayons.red("{} is not a valid region".format(r)))
+        exit(1)
+
+
 print("Starting full account scan for these Regions: {}".format(",".join(config.REGIONS)))
 account_id = helper.get_account_id()
 print("Account: {}".format(account_id))
 start_date = datetime.now().strftime("%Y-%m-%d_%H:%M")
-print("Start date: {}".format(datetime.now()))
+print("Start date: {}".format(start_date))
 
 start = timeit.default_timer()
 
