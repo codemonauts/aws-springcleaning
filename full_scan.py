@@ -16,6 +16,7 @@ from modules import (
     ami,
     ec2_snapshots,
     ec2,
+    eip,
     rds_snapshots,
     securitygroups,
     volumes,
@@ -62,6 +63,9 @@ cloudformation.scan()
 
 print(crayons.yellow("Scanning S3"))
 s3.scan()
+
+print(crayons.yellow("Scanning elastic IPs"))
+eip.scan()
 
 stop = timeit.default_timer()
 runtime = int(stop - start)
