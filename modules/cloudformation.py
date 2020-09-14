@@ -23,9 +23,13 @@ def scan():
         print("Found {} CF stacks in {}".format(len(stacks), region))
         old = []
         for s in stacks:
-            age = now - s["LastUpdatedTime"]
+            # Stacks without a 'LastUpdatedTime' key are new and therefore
+            # now-now generates a ago of 0
+            age = now - s.get("LastUpdatedTime", now)
             if age > limit:
-                last_updated = arrow.get(s["LastUpdatedTime"]).humanize()
+                last_updated = "Never"
+                if s.get("LastUpdatedTime"):
+                    last_updated = arrow.get(s["LastUpdatedTime"]).humanize()
                 print("  - {:<50} (Last updated: {}, State: {})".format(s["StackName"], last_updated, s["StackStatus"]))
 
 
