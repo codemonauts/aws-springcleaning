@@ -6,6 +6,13 @@ from datetime import timedelta
 from helper import get_all_instances
 
 
+def get_name(instance):
+    for t in instance["Tags"]:
+        if t["Key"] == "Name":
+            return t["Value"]
+    return instance["InstanceId"]
+
+
 def scan():
     now = arrow.utcnow()
     limit = timedelta(days=EC2_OLD_DAYS)
@@ -33,13 +40,13 @@ def scan():
         if len(stopped):
             print("{} instances are stopped:".format(crayons.red(len(stopped))))
             for i in stopped:
-                name = [t["Value"] for t in i["Tags"] if t["Key"] == "Name"][0]
+                name = get_name(i)
                 print("  - {:<50}".format(name))
 
         if len(old):
             print("{} old instances are still running:".format(crayons.red(len(old))))
             for i in old:
-                name = [t["Value"] for t in i["Tags"] if t["Key"] == "Name"][0]
+                name = get_name(i)
                 launch_time = arrow.get(i["LaunchTime"]).humanize()
                 print("  - {:<50} (Started {})".format(name, launch_time))
 
