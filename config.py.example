@@ -11,3 +11,6 @@ EC2_SNAPSHOT_OLD_DAYS = 100
 
 # Alert when RDS snapshots are this old
 RDS_SNAPSHOT_OLD_DAYS = 100
+
+# Alert when Cloudformation Stacks haven't been updated in this amount of days
+CF_STACK_OLD_DAYS = 100
