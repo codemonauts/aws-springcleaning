@@ -32,6 +32,8 @@ def scan():
             flags.append(crayons.red(" World Open"))
         if sg["GroupName"].find("launch-wizard") != -1:
             flags.append(crayons.red(" DefaultName"))
+        if sg["GroupName"].startswith("packer_"):
+            flags.append(crayons.red(" Packer"))
         if len(flags) > 0:
             suffix = ",".join([str(f) for f in flags])
             print("  - {} ({}) {}".format(sg["GroupId"], sg["GroupName"], suffix))
