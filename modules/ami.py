@@ -30,7 +30,11 @@ def scan():
         templates = resp.get("LaunchTemplates")
         for t in templates:
             resp = ec2_client.describe_launch_template_versions(LaunchTemplateName=t["LaunchTemplateName"])
-            used_images += [v["LaunchTemplateData"]["ImageId"] for v in resp["LaunchTemplateVersions"]]
+            try:
+                used_images += [v["LaunchTemplateData"]["ImageId"] for v in resp["LaunchTemplateVersions"]]
+            except KeyError:
+                # Launchtemplates does not need to have a preconfigured AMI
+                pass
 
         unused_images = []
         for ami in ami_list:
