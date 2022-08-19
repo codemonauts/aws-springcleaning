@@ -65,3 +65,25 @@ def get_all_regions():
     response = ec2.describe_regions()
     regions = response["Regions"]
     return [r["RegionName"] for r in regions]
+
+
+def get_elb_sg(region=None):
+    if not region:
+        region = config.REGIONS
+    elb_sg = []
+    for region in config.REGIONS:
+        client = boto3.client("elb", region_name=region)
+        data = client.describe_load_balancers()
+        for elbDesc in data["LoadBalancerDescriptions"]:
+            elb_sg.extend(elbDesc["SecurityGroups"])
+    return elb_sg
+
+
+def get_all_elbs(region=None):
+    if not region:
+        region = config.REGIONS
+    data = ""
+    for region in config.REGIONS:
+        client = boto3.client("elb", region_name=region)
+        data = client.describe_load_balancers()
+    return data

@@ -24,6 +24,7 @@ from modules import (
     cloudwatch,
     cloudformation,
     s3,
+    elb
 )
 
 all_regions = helper.get_all_regions()
@@ -78,6 +79,9 @@ s3.scan()
 
 print(crayons.yellow("Scanning elastic IPs"))
 eip.scan()
+
+print(crayons.yellow("Scanning Elbs"))
+elb.scan()
 
 stop = timeit.default_timer()
 runtime = int(stop - start)

@@ -1,5 +1,5 @@
 #! /usr/bin/env python3
-from helper import get_all_instances, get_all_rds, get_all_sg
+from helper import get_all_instances, get_all_rds, get_all_sg, get_elb_sg
 import crayons
 
 
@@ -15,14 +15,18 @@ def scan():
         used_groups.extend(attached)
 
     all_sg = get_all_sg()
-
+    elb_sg = get_elb_sg()
     print("Found {} security groups".format(len(all_sg)))
 
     not_used = []
     for group in all_sg:
         id = group["GroupId"]
         if id not in used_groups:
-            not_used.append(group)
+            if len(elb_sg) > 0:
+                if id not in elb_sg:
+                    not_used.append(group)
+            else:
+                not_used.append(group)
 
     for sg in all_sg:
         flags = []
